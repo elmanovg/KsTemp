@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tests:
   - mainImage: {fileID: 21300000, guid: cec64c89496b19b4ca9501af0b33cf38, type: 3}
-    dinoImage: {fileID: 21300000, guid: e17023b831e258d4c8c043a4c97aa89c, type: 3}
+    correctAnswer: 0
     optionsImages:
     - {fileID: 21300000, guid: 0ab2c9f04d00e3447bd36b7b258cfd46, type: 3}
     - {fileID: 21300000, guid: d09f04f1ec9092e41a83c521ab453369, type: 3}
@@ -23,7 +23,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: f076f0534fa70904794f44de8d567f88, type: 3}
     - {fileID: 21300000, guid: 7f1e639a14959e24a9fb329680de9707, type: 3}
   - mainImage: {fileID: 21300000, guid: 81ef723da26278b48a70eddcd9ba5025, type: 3}
-    dinoImage: {fileID: 21300000, guid: 81df5f1e38490e447a0df0f498599e70, type: 3}
+    correctAnswer: 0
     optionsImages:
     - {fileID: 21300000, guid: 7740a347ab715b24095a9a812f38ca20, type: 3}
     - {fileID: 21300000, guid: 28d276679d7468243a2186cac43aaced, type: 3}

@@ -23,7 +23,6 @@ public class SinglePuzzleController : MonoBehaviour
         if (Vector3.Distance(transform.position, _puzzleCropper.GetTransformPosition(_index)) < 0.3)
         {
             Destroy(GetComponent<Collider2D>());
-            Debug.Log("SOSAT");
         }
         else
         {
