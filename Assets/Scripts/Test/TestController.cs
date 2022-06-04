@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +6,6 @@ public class TestController : MonoBehaviour
 {
     [SerializeField] private TestConfiguration testConfiguration;
     [SerializeField] private Image mainImage;
-    [SerializeField] private Image dinoImage;
     private const int SIZE = 6;
     [SerializeField] private GameObject[] buttons = new GameObject[SIZE];
 
@@ -33,13 +31,12 @@ public class TestController : MonoBehaviour
     private void InitCurrentQuestion()
     {
         var firstTest = tests[currentTest];
-        InitQuestion(firstTest.mainImage, firstTest.dinoImage, firstTest.optionsImages);
+        InitQuestion(firstTest.mainImage, firstTest.optionsImages);
     }
 
-    private void InitQuestion(Sprite mainSprite, Sprite dinoSprite, Sprite[] buttonsImages)
+    private void InitQuestion(Sprite mainSprite, Sprite[] buttonsImages)
     {
         mainImage.sprite = mainSprite;
-        dinoImage.sprite = dinoSprite;
         if (buttonsImages.Length != SIZE)
         {
             throw new Exception("Bad 'buttonsImages' size");
@@ -65,7 +62,7 @@ public class TestController : MonoBehaviour
         }
         FinishTest();
     }
-    private List<Tuple<int, DateTime>> answers = new List<Tuple<int, DateTime>>();
+    private List<Tuple<int, DateTime>> answers = new();
     private void SaveInfo(int index)
     {
         answers.Add(new Tuple<int, DateTime>(index, DateTime.Now));
@@ -74,7 +71,7 @@ public class TestController : MonoBehaviour
     {
         foreach (var ans in answers)
         {
-            print(ans.Item1.ToString() + " " + ans.Item2.ToString("HHmmss"));
+            print(ans.Item1 + " " + ans.Item2.ToString("HHmmss"));
         }
     }
 }

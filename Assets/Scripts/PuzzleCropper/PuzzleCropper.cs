@@ -1,120 +1,128 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+
 [ExecuteInEditMode]
 public class PuzzleCropper : MonoBehaviour
 {
-    [SerializeField] private Sprite source;
-    [SerializeField] private Image[] imgs;
-    [SerializeField] private int splitHorizontal;
-    [SerializeField] private int splitVertical;
-
     [SerializeField] private GameObject gridNode;
+    [SerializeField] private Texture2D source;
 
-    [SerializeField] private int padding;
-    [SerializeField] private int indent;
-    [SerializeField] private Vector2 pos;
-    private Rect fragmentRect;
-    private Vector2 spritePivot;
-    private Texture texture;
+    [SerializeField] private float scale;
+    [SerializeField] private String path;
+    [SerializeField] private GameObject line;
+    [SerializeField] private GameObject image;
+    [SerializeField] private float opacity;
+    [SerializeField] private Difficulty difficulty;
+
+    [SerializeField] private GridLayoutGroup containter;
+
+    private List<RectTransform> targetTransforms = new();
+
+    enum Difficulty
+    {
+        easy,
+        medium,
+        hard
+    }
+    
+    private Dictionary<Difficulty, float> paddings = new()
+    {
+        { Difficulty.easy, 22 },
+        { Difficulty.medium, 18 },
+        { Difficulty.hard, 16 }
+    };
+
+    private Dictionary<Difficulty, Tuple<int, int>> splits = new()
+    {
+        { Difficulty.easy, new Tuple<int, int>(5, 4) },
+        { Difficulty.medium, new Tuple<int, int>(8, 5) },
+        { Difficulty.hard, new Tuple<int, int>(10, 6) }
+    };
+
+    private Dictionary<Difficulty, int> spacings = new()
+    {
+        { Difficulty.easy, 74 },
+        { Difficulty.medium, 58 },
+        { Difficulty.hard, 48 }
+    };
+
     private void Start()
     {
-        texture = source.texture;
+        UpdateAllImages();
     }
 
     public void UpdateAllImages()
     {
-        imgs = gridNode.GetComponentsInChildren<Image>();
-
-        fragmentRect = new Rect(0, 0, texture.width / splitHorizontal, texture.height / splitVertical - padding);
-        spritePivot = new Vector2(0.5f, 0.5f);
-        for (int i = 0; i < imgs.Length; i++)
+        var splitHorizontal = splits[difficulty].Item1;
+        var splitVertical = splits[difficulty].Item2;
+        var padding = paddings[difficulty];
+        while (gridNode.transform.childCount != 0)
         {
-            while (imgs[i].transform.childCount > 0)
+            DestroyImmediate(gridNode.transform.GetChild(0).gameObject);
+        }
+
+        targetTransforms.Clear();
+        var imgs = new List<Image>();
+        for (int i = 0; i < splitVertical; i++)
+        {
+            var newLine = Instantiate(line, gridNode.transform, false);
+            newLine.GetComponent<HorizontalLayoutGroup>().spacing = -spacings[difficulty] * scale;
+            for (int j = 0; j < splitHorizontal; j++)
             {
-                GameObject.DestroyImmediate(imgs[i].transform.GetChild(0).gameObject);
+                var newImage = Instantiate(image, newLine.transform, false);
+                imgs.Add(newImage.GetComponent<Image>());
+                targetTransforms.Add(newImage.GetComponent<RectTransform>());
             }
-            piece(i % splitHorizontal, i / splitHorizontal, imgs[i]);
-            addColliders(i % splitHorizontal, i / splitHorizontal, imgs[i]);
         }
-    }
-    private void piece(int x, int y, Image img)
-    {
-        var currtentRect = new Rect(fragmentRect);
-        currtentRect.x += (fragmentRect.width + indent) * x;
-        currtentRect.y += fragmentRect.height * y;
-        if (y > 1)
-        {
-            currtentRect.y += (padding + indent) * (y - 1);
-        }
-        if (x == splitHorizontal - 1)
-        {
-            currtentRect.width -= padding + indent;
-        }
-        if (y == 0)
-        {
-            currtentRect.height -= indent;
-        }
-        else
-        {
-            currtentRect.height += padding;
-        }
-        var sprite = Sprite.Create(source.texture, currtentRect, spritePivot);
-        var gridTransform = gridNode.GetComponent<RectTransform>();
-        gridTransform.sizeDelta = new Vector2(gridTransform.rect.width, gridTransform.rect.width / (texture.width * 1f / texture.height));
-        var ratio = texture.width * 1f / gridTransform.rect.width;
 
-        var grid = img.GetComponent<RectTransform>();
-        grid.sizeDelta = new Vector2(gridTransform.rect.width / splitHorizontal - (x == splitHorizontal - 1 ? padding / ratio + indent / ratio : 0),
-                                    gridTransform.rect.height / splitVertical - (y == 0 ? padding / ratio + indent / ratio : 0));
+        gridNode.GetComponent<RectTransform>().sizeDelta = new Vector2(source.width * scale, source.height * scale);
+        for (int i = 0; i < imgs.Count; i++)
+        {
+            var texture =
+                Resources.Load("Puzzle/" + path + "_" + splitHorizontal + "x" + splitVertical + "/" + (i + 1)) as
+                    Texture2D;
+            if (texture == null)
+            {
+                Debug.Log("Wrong path: " + path);
+                return;
+            }
 
-        img.sprite = sprite;
+            var yPadding = i / splitHorizontal == splitVertical - 1 ? 0 : padding;
+            var xPadding = i % splitHorizontal == splitHorizontal - 1 ? 0 : padding;
+            var sprite = Sprite.Create(texture,
+                new Rect(0, yPadding, texture.width - xPadding, texture.height - yPadding),
+                new Vector2(0.5f, 0.5f));
+            imgs[i].sprite = sprite;
+            imgs[i].color = new Color(imgs[i].color.r, imgs[i].color.g, imgs[i].color.b, opacity);
+            imgs[i].GetComponent<RectTransform>().sizeDelta = new Vector2((texture.width - xPadding) * scale,
+                (texture.height - yPadding) * scale);
+        }
+
+        gridNode.GetComponent<VerticalLayoutGroup>().spacing = -spacings[difficulty] * scale;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(gridNode.GetComponent<RectTransform>());
     }
 
-    private void addColliders(int x, int y, Image img)
+    public void Test()
     {
-        var gridTransform = gridNode.GetComponent<RectTransform>();
-        gridTransform.sizeDelta = new Vector2(gridTransform.rect.width, gridTransform.rect.width / (texture.width * 1f / texture.height));
-        var ratio = texture.width * 1f / gridTransform.rect.width;
-        var segmentProcent = 0.5f;
-        if (x < splitHorizontal - 1)
-        {
-            var node = new GameObject("right");
-            node.transform.parent = img.transform;
-            node.transform.localPosition = Vector3.zero;
-            var collider = node.AddComponent<BoxCollider2D>();
-            collider.size = new Vector2(1f * padding / ratio, fragmentRect.height * segmentProcent / ratio);
-            collider.offset = new Vector2(1f * fragmentRect.width / 2 / ratio - 1f * padding / ratio / 2, 0);
-        }
+        var imgSize = targetTransforms[0].sizeDelta;
+        var ratio = (containter.GetComponent<RectTransform>()).sizeDelta.y /
+                    (gridNode.GetComponent<RectTransform>()).sizeDelta.x;
+        var puzzleContainerSize = Math.Max(imgSize.x * ratio, imgSize.y * ratio);
+        var puzzlePadding = puzzleContainerSize * 0.1f;
+        containter.spacing = new Vector2(puzzlePadding, puzzlePadding);
+        containter.constraintCount = splits[difficulty].Item2;
+    }
 
-        if (x > 0)
-        {
-            var node = new GameObject("left");
-            node.transform.parent = img.transform;
-            node.transform.localPosition = Vector3.zero;
-            var collider = node.AddComponent<BoxCollider2D>();
-            collider.size = new Vector2(1f * padding / ratio, fragmentRect.height * segmentProcent / ratio);
-            collider.offset = new Vector2(-(1f * fragmentRect.width / 2 / ratio - 1f * padding / ratio / ((x == splitHorizontal - 1) ? 1 : 2) - ((x == splitHorizontal - 1) ? indent / ratio : 0)), 0);
-        }
-
-        if (y < splitVertical - 1)
-        {
-            var node = new GameObject("top");
-            node.transform.parent = img.transform;
-            node.transform.localPosition = Vector3.zero;
-            var collider = node.AddComponent<BoxCollider2D>();
-            collider.size = new Vector2(fragmentRect.width * segmentProcent / ratio, 1f * padding / ratio);
-            collider.offset = new Vector2(0, 1f * fragmentRect.height / 2 / ratio - 1f * padding / ratio / (y == 0 ? 1 : 2) + ((y == 0) ? 0 : indent / ratio));
-        }
-        if (y > 0)
-        {
-            var node = new GameObject("bottom");
-            node.transform.parent = img.transform;
-            node.transform.localPosition = Vector3.zero;
-            var collider = node.AddComponent<BoxCollider2D>();
-            collider.size = new Vector2(fragmentRect.width * segmentProcent / ratio, 1f * padding / ratio);
-            collider.offset = new Vector2(0, -(1f * fragmentRect.height / 2 / ratio - 1f * padding / ratio / (y == 0 ? 1 : 2) + ((y == 0) ? 0 : indent / ratio)));
-        }
+    public Vector3 GetTransformPosition(int i)
+    {
+        var transform = targetTransforms[i];
+        var result = transform.TransformPoint(Vector3.zero);
+        result.z = 0;
+        return result;
     }
 }

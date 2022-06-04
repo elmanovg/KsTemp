@@ -12,7 +12,7 @@ public class TestConfiguration : ScriptableObject
     public class SingleTestClass
     {
         public Sprite mainImage;
-        public Sprite dinoImage;
+        public int correctAnswer;
 
         public Sprite[] optionsImages = new Sprite[6];
     }

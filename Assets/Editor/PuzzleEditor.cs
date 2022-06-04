@@ -14,5 +14,10 @@ public class PuzzleEditor : Editor
         {
             myTarget.UpdateAllImages();
         }
+        
+        if (GUILayout.Button("Test"))
+        {
+            myTarget.Test();
+        }
     }
 }

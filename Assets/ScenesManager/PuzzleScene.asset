@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb45b83a38b7d514eb78686b2f4805cc, type: 3}
-  m_Name: SceneController
+  m_Name: PuzzleScene
   m_EditorClassIdentifier: 
-  scenesOrder: TestScene
+  scenesOrder: PuzzleScene
