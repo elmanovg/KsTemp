@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +17,8 @@ public class PuzzleCropper : MonoBehaviour
     [SerializeField] private float opacity;
     [SerializeField] private Difficulty difficulty;
 
-    [SerializeField] private GridLayoutGroup containter;
+    [SerializeField] private VerticalLayoutGroup containter;
+    [SerializeField] private GameObject puzzlePrefab;
 
     private List<RectTransform> targetTransforms = new();
 
@@ -29,7 +28,7 @@ public class PuzzleCropper : MonoBehaviour
         medium,
         hard
     }
-    
+
     private Dictionary<Difficulty, float> paddings = new()
     {
         { Difficulty.easy, 22 },
@@ -110,12 +109,62 @@ public class PuzzleCropper : MonoBehaviour
     public void Test()
     {
         var imgSize = targetTransforms[0].sizeDelta;
-        var ratio = (containter.GetComponent<RectTransform>()).sizeDelta.y /
-                    (gridNode.GetComponent<RectTransform>()).sizeDelta.x;
-        var puzzleContainerSize = Math.Max(imgSize.x * ratio, imgSize.y * ratio);
-        var puzzlePadding = puzzleContainerSize * 0.1f;
-        containter.spacing = new Vector2(puzzlePadding, puzzlePadding);
-        containter.constraintCount = splits[difficulty].Item2;
+        var containerRect = containter.GetComponent<RectTransform>();
+        var gridRect = gridNode.GetComponent<RectTransform>();
+        var sourceRatio = gridRect.sizeDelta.y / gridRect.sizeDelta.x;
+        var smallBigRatio =
+            targetTransforms[0].sizeDelta.x / targetTransforms[splits[difficulty].Item1 - 1].sizeDelta.x;
+        var puzzleContainerSize = containerRect.sizeDelta.y /
+                                  (splits[difficulty].Item1 - (difficulty == Difficulty.easy ? 0 : 1));
+        containerRect.sizeDelta =
+            new Vector2(puzzleContainerSize * (splits[difficulty].Item2 + (difficulty == Difficulty.easy ? 0 : 1)),
+                containerRect.sizeDelta.y);
+
+        while (containter.transform.childCount > 0)
+        {
+            DestroyImmediate(containter.transform.GetChild(0).gameObject);
+        }
+
+        var counter = 0;
+        for (var i = 0; i < splits[difficulty].Item1; i++)
+        {
+            var imagesLine = Instantiate(line, containter.transform, false);
+            for (var j = 0; j < splits[difficulty].Item2 + (difficulty == Difficulty.easy ? 0 : 1); j++)
+            {
+                var imageContainer = new GameObject("ImageContainer", typeof(RectTransform));
+                imageContainer.transform.SetParent(imagesLine.transform);
+                imageContainer.transform.localScale = new Vector3(1, 1, 1);
+                imageContainer.transform.position = imageContainer.transform.parent.TransformPoint(Vector3.zero);
+                imageContainer.transform.GetComponent<RectTransform>().sizeDelta =
+                    new Vector2(puzzleContainerSize, puzzleContainerSize);
+                var image = Instantiate(puzzlePrefab, imageContainer.transform, false);
+                image.transform.position = imageContainer.transform.TransformPoint(Vector3.zero);
+                var edgesRatio = targetTransforms[counter].sizeDelta.x * 1f / targetTransforms[counter].sizeDelta.y;
+                var finalSize = puzzleContainerSize /
+                                (counter % splits[difficulty].Item1 == splits[difficulty].Item1 - 1
+                                    ? smallBigRatio
+                                    : 1);
+                image.GetComponent<RectTransform>().sizeDelta =
+                    new Vector2(finalSize, finalSize / edgesRatio);
+                var puzzleController = image.GetComponent<SinglePuzzleController>();
+
+                var targetTransform = targetTransforms[counter].gameObject.GetComponent<Image>();
+                puzzleController.init(counter, this, Vector3.zero, targetTransform.sprite,
+                    imgSize.x * 1f / puzzleContainerSize);
+                counter++;
+                if (counter >= splits[difficulty].Item2 * splits[difficulty].Item1)
+                {
+                    break;
+                }
+            }
+
+            if (counter >= splits[difficulty].Item2 * splits[difficulty].Item1)
+            {
+                break;
+            }
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(containter.GetComponent<RectTransform>());
     }
 
     public Vector3 GetTransformPosition(int i)
