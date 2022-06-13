@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 581530751}
   - component: {fileID: 581530750}
   - component: {fileID: 581530754}
+  - component: {fileID: 581530755}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -247,6 +248,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundOnButton: {fileID: 1731454504}
   soundOffButton: {fileID: 780406968}
+--- !u!114 &581530755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581530749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b89c77e27d63ffe49bc4b46cfb88982f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneController: {fileID: 11400000, guid: dba153b37cd7f3f4896323a6f087108d, type: 2}
 --- !u!1 &690554894
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +550,7 @@ GameObject:
   - component: {fileID: 995002082}
   - component: {fileID: 995002081}
   m_Layer: 5
-  m_Name: Button (signup)
+  m_Name: Button (play)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -560,7 +574,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 740.5, y: -412}
-  m_SizeDelta: {x: 175, y: 176}
+  m_SizeDelta: {x: 128, y: 176}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &995002081
 MonoBehaviour:
@@ -606,10 +620,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TestController, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 3
+      - m_Target: {fileID: 11400000, guid: 2348dd7c4ccafdb43a40246bb845262f, type: 2}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -638,7 +652,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: da9bedb2c1d388617bbe08199f75c42f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4a5dab1648ab70e4aba55a038fac895a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -815,10 +829,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TestController, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 3
+      - m_Target: {fileID: 581530755}
+        m_TargetAssemblyTypeName: ButtonBehavior, Assembly-CSharp
+        m_MethodName: OnBack
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1297,19 +1311,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1731454505}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TestController, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1731454505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1431,10 +1433,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TestController, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 3
+      - m_Target: {fileID: 11400000, guid: 1c29d5fdfdc944541964b1146223233f, type: 2}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

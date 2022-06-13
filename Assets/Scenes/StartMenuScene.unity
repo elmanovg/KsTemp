@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 581530751}
   - component: {fileID: 581530750}
   - component: {fileID: 581530754}
+  - component: {fileID: 581530755}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -245,6 +246,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundOnButton: {fileID: 1731454504}
   soundOffButton: {fileID: 780406968}
+--- !u!114 &581530755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581530749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b89c77e27d63ffe49bc4b46cfb88982f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneController: {fileID: 11400000, guid: dba153b37cd7f3f4896323a6f087108d, type: 2}
 --- !u!1 &690554894
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,10 +840,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TestController, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 3
+      - m_Target: {fileID: 581530755}
+        m_TargetAssemblyTypeName: ButtonBehavior, Assembly-CSharp
+        m_MethodName: OnExit
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
