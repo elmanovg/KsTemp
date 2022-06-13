@@ -1,14 +1,18 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class Login : MonoBehaviour 
 {
     [SerializeField] private TMP_InputField loginField;
     [SerializeField] private TMP_InputField passwordField;
+
     [SerializeField] private UserStorage userStorage;
+
     [SerializeField] private SceneController psycScene;
     [SerializeField] private SceneController childScene;
+
     [SerializeField] private GameObject loginImage1;
     [SerializeField] private GameObject loginImage2;
     [SerializeField] private GameObject loginImage3;
@@ -16,18 +20,29 @@ public class Login : MonoBehaviour
     [SerializeField] private GameObject loginImage5;
     [SerializeField] private GameObject loginImage6;
     [SerializeField] private GameObject loginImage7;
+
     [SerializeField] private GameObject psycd;
     [SerializeField] private GameObject psyca;
     [SerializeField] private GameObject childd;
     [SerializeField] private GameObject childa;
     [SerializeField] private GameObject buttonOff3;
     [SerializeField] private GameObject buttonOn3;
+
+    [SerializeField] private TMP_InputField email;
+
+    [SerializeField] private TMP_InputField surname;
+    [SerializeField] private TMP_InputField name;
+    [SerializeField] private TMP_InputField fname;
+
+    [SerializeField] private TMP_InputField age;
+
     [SerializeField] private GameObject boy;
     [SerializeField] private GameObject girl;
     [SerializeField] private GameObject boya;
     [SerializeField] private GameObject girla;
     [SerializeField] private GameObject buttonOff4;
     [SerializeField] private GameObject buttonOn4;
+
 
     void Start() {
         loginImage2.SetActive(false);
@@ -62,30 +77,42 @@ public class Login : MonoBehaviour
 
     public void Button3OnClick() 
     {
+         userStorage.isPsyc = psyca.activeSelf;
+
         loginImage3.SetActive(false);
         loginImage4.SetActive(true);
     }
 
     public void Button4OnClick()
     {
+        userStorage.email = email.text;
+
         loginImage4.SetActive(false);
         loginImage5.SetActive(true);
     }
 
     public void Button5OnClick()
     {
+        userStorage.surname = surname.text;
+        userStorage.name = name.text;
+        userStorage.fname = fname.text;
+
         loginImage5.SetActive(false);
         loginImage6.SetActive(true);
     }
 
     public void Button6OnClick()
     {
+        userStorage.age = Int32.Parse(age.text);
+
         loginImage6.SetActive(false);
         loginImage7.SetActive(true);
     }
 
     public void Button7OnClick() 
     {
+        userStorage.isBoy = boya.activeSelf;
+
         if (userStorage.isPsyc) {
             psycScene.ChangeScene();
         } else {
