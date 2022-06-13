@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed8edf1650bb6e45a9d0e093f1204e5, type: 3}
   m_Name: UserStorage
   m_EditorClassIdentifier: 
-  login: 
+  login: Pavel
   password: 
   isPsyc: 1
   email: 
