@@ -7,6 +7,8 @@ public class Login : MonoBehaviour
     [SerializeField] private TMP_InputField loginField;
     [SerializeField] private TMP_InputField passwordField;
     [SerializeField] private UserStorage userStorage;
+    [SerializeField] private SceneController psycScene;
+    [SerializeField] private SceneController childScene;
     [SerializeField] private GameObject loginImage1;
     [SerializeField] private GameObject loginImage2;
     [SerializeField] private GameObject loginImage3;
@@ -55,10 +57,7 @@ public class Login : MonoBehaviour
     }
 
     
-    public void OnClick2() 
-    {
-        loginImage2.SetActive(false);
-    }
+    public void OnClick2() {}
     
 
     public void Button3OnClick() 
@@ -87,7 +86,11 @@ public class Login : MonoBehaviour
 
     public void Button7OnClick() 
     {
-        loginImage7.SetActive(false);
+        if (userStorage.isPsyc) {
+            psycScene.ChangeScene();
+        } else {
+            childScene.ChangeScene();
+        }
     }
 
     public void ForgotPasswordOnClick() 

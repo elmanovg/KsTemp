@@ -9,15 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aed8edf1650bb6e45a9d0e093f1204e5, type: 3}
-  m_Name: UserStorage
+  m_Script: {fileID: 11500000, guid: eb45b83a38b7d514eb78686b2f4805cc, type: 3}
+  m_Name: SpeciallistMenuScene
   m_EditorClassIdentifier: 
-  login: 
-  password: 
-  isPsyc: 1
-  email: 
-  surname: 
-  name: 
-  fname: 
-  age: 0
-  isBoy: 0
+  scenesOrder: SpeciallistMenuScene
