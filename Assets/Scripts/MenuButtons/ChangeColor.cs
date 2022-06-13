@@ -26,6 +26,9 @@ public class ChangeColor : MonoBehaviour
     [SerializeField] private Image dinoM;
     [SerializeField] private Image dinoY;
     [SerializeField] private Image dinoDefault;
+
+    [SerializeField] private Image cancelDisable;
+    [SerializeField] private Button cancelButton;
     
     private Button[] colorButtons;
     private Image [] colorDisabled;
@@ -51,6 +54,9 @@ public class ChangeColor : MonoBehaviour
            dino.gameObject.SetActive(false);
         }
 
+        cancelButton.gameObject.SetActive(false);
+        cancelButton.onClick.AddListener(() => clickOnCancelButton());
+
         colorButtonR.onClick.AddListener(() => clickOnColorButtonR());
         colorButtonG.onClick.AddListener(() => clickOnColorButtonG());
         colorButtonB.onClick.AddListener(() => clickOnColorButtonB());
@@ -62,17 +68,33 @@ public class ChangeColor : MonoBehaviour
     void Update () {
     }
 
-    void clickOnColorButton(int index) {
-        if (active >= 0) {
-            colorButtons[active].gameObject.SetActive(true);
-            colorDisabled[active].gameObject.SetActive(false);
-            dinos[active].gameObject.SetActive(false);
-        } else {
-            dinoDefault.gameObject.SetActive(false);
-        }
+    void disableColor(int index) {
+        colorButtons[index].gameObject.SetActive(true);
+        colorDisabled[index].gameObject.SetActive(false);
+        dinos[index].gameObject.SetActive(false);
+    }
+
+    void enableColor(int index) {
         colorButtons[index].gameObject.SetActive(false);
         colorDisabled[index].gameObject.SetActive(true);
         dinos[index].gameObject.SetActive(true);
+    }
+
+    void clickOnCancelButton() {
+        disableColor(active);
+        active = -1;
+        dinoDefault.gameObject.SetActive(true);
+        cancelButton.gameObject.SetActive(false);
+    }
+
+    void clickOnColorButton(int index) {
+        if (active >= 0) {
+            disableColor(active);
+        } else {
+            cancelButton.gameObject.SetActive(true);
+            dinoDefault.gameObject.SetActive(false);
+        }
+        enableColor(index);
         active = index;
     }
 
