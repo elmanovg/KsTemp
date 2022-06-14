@@ -1,4 +1,4 @@
-using Microsoft.Unity.VisualStudio.Editor;
+using UnityEditor;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
 

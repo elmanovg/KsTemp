@@ -5815,7 +5815,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1417776127}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41bf84ae09f2dcd42b9a8c6cd79a5d21, type: 3}
+  m_Script: {fileID: 11500000, guid: 172dfb62b43c22b4a858451c4e772c6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   loginField: {fileID: 903112001}
@@ -5836,7 +5836,7 @@ MonoBehaviour:
   childa: {fileID: 1107800235}
   buttonOff3: {fileID: 703430354}
   buttonOn3: {fileID: 1965596663}
-  email: {fileID: 1301805651}
+  email: {fileID: 1507480397}
   surname: {fileID: 388859424}
   name: {fileID: 1693031411}
   fname: {fileID: 1533550429}

@@ -2,6 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 public class Login : MonoBehaviour 
 {
@@ -112,6 +115,18 @@ public class Login : MonoBehaviour
     public void Button7OnClick() 
     {
         userStorage.isBoy = boya.activeSelf;
+
+        #if UNITY_EDITOR
+            var userStorage_ = new UserStorage();
+            EditorUtility.CopySerialized(userStorage, userStorage_);
+            userStorage_.login = loginField.text;
+            userStorage_.password = passwordField.text;
+
+            string path = AssetDatabase.GetAssetPath(userStorage);
+            AssetDatabase.DeleteAsset(path);
+            AssetDatabase.CreateAsset(userStorage_, path);
+            AssetDatabase.Refresh();
+        #endif
 
         if (userStorage.isPsyc) {
             psycScene.ChangeScene();
