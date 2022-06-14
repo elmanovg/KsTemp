@@ -6,7 +6,7 @@ using TMPro;
 
 public class ProfileController : MonoBehaviour {
 
-    [SerializeField] private UserStorage userStorage;
+    private UserStorage userStorage;
     [SerializeField] private TextMeshProUGUI login;
     [SerializeField] private TextMeshProUGUI password;
     [SerializeField] private TextMeshProUGUI fullName;
@@ -74,6 +74,9 @@ public class ProfileController : MonoBehaviour {
     }
 
     void Start () {
+        userStorage = new UserStorage();
+        JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("player"), userStorage);
+        
         login.SetText(userStorage.login);
         password.SetText(hidePassword(userStorage.password, 2));
         fullName.SetText(userStorage.name + " " + userStorage.surname + " " + userStorage.fname);

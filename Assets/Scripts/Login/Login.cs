@@ -2,16 +2,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-#if UNITY_EDITOR
-    using UnityEditor;
-#endif
 
 public class Login : MonoBehaviour 
 {
     [SerializeField] private TMP_InputField loginField;
     [SerializeField] private TMP_InputField passwordField;
 
-    [SerializeField] private UserStorage userStorage;
+    private UserStorage userStorage;
 
     [SerializeField] private SceneController psycScene;
     [SerializeField] private SceneController childScene;
@@ -48,6 +45,8 @@ public class Login : MonoBehaviour
 
 
     void Start() {
+        // userStorage = JsonUtility.FromJson<UserStorage>(PlayerPrefs.GetString("player"));
+        userStorage = new UserStorage();
         loginImage2.SetActive(false);
         loginImage3.SetActive(false);
         loginImage4.SetActive(false);
@@ -69,7 +68,7 @@ public class Login : MonoBehaviour
     {
         userStorage.login = loginField.text;
         userStorage.password = passwordField.text;
-
+        
         loginImage1.SetActive(false);
         loginImage3.SetActive(true);
     }
@@ -80,7 +79,7 @@ public class Login : MonoBehaviour
 
     public void Button3OnClick() 
     {
-         userStorage.isPsyc = psyca.activeSelf;
+        userStorage.isPsyc = psyca.activeSelf;
 
         loginImage3.SetActive(false);
         loginImage4.SetActive(true);
@@ -115,18 +114,7 @@ public class Login : MonoBehaviour
     public void Button7OnClick() 
     {
         userStorage.isBoy = boya.activeSelf;
-
-        #if UNITY_EDITOR
-            var userStorage_ = new UserStorage();
-            EditorUtility.CopySerialized(userStorage, userStorage_);
-            userStorage_.login = loginField.text;
-            userStorage_.password = passwordField.text;
-
-            string path = AssetDatabase.GetAssetPath(userStorage);
-            AssetDatabase.DeleteAsset(path);
-            AssetDatabase.CreateAsset(userStorage_, path);
-            AssetDatabase.Refresh();
-        #endif
+        PlayerPrefs.SetString("player", JsonUtility.ToJson(userStorage));
 
         if (userStorage.isPsyc) {
             psycScene.ChangeScene();
