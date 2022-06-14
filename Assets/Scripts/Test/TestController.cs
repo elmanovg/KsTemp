@@ -10,6 +10,7 @@ public class TestController : MonoBehaviour
     [SerializeField] private GameObject[] buttons = new GameObject[SIZE];
 
     private int currentTest = 0;
+    private int[] rightAnswers;
 
     void OnValidate()
     {
@@ -24,6 +25,7 @@ public class TestController : MonoBehaviour
 
     private void Start()
     {
+        rightAnswers = new int[]{3, 4};
         tests = testConfiguration.GetTests;
         InitCurrentQuestion();
     }
@@ -69,9 +71,16 @@ public class TestController : MonoBehaviour
     }
     private void FinishTest()
     {
-        foreach (var ans in answers)
+        int score = 0;
+        for (int i = 0; i < tests.Count; i++)
         {
-            print(ans.Item1 + " " + ans.Item2.ToString("HHmmss"));
+            if (answers[i].Item1 == rightAnswers[i]) {
+                score += 1;
+            }
         }
+        var userStorage = new UserStorage();
+        JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("player"), userStorage);
+        userStorage.score = score;
+        PlayerPrefs.SetString("player", JsonUtility.ToJson(userStorage));
     }
 }

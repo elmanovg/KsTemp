@@ -26,7 +26,7 @@ public class ProfileController : MonoBehaviour {
     [SerializeField] private Image sexFaceFalse;
 
 
-    private int maxScore = 3;
+    private int maxScore = 2;
     
 
     private Image [] eggs;
